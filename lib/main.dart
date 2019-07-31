@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/common/const.dart';
 import 'package:myapp/pages/main.dart';
+import 'package:myapp/pages/splash.dart';
 import 'package:flustars/flustars.dart';
 
 void main() => runApp(new MyApp());
@@ -33,13 +34,13 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     
     return new MaterialApp(
-      // routes: {
-      //  RouteName.home: (ctx) => MainPage(),
-      // },
+      routes: {
+       RouteName.home: (ctx) => NavigationKeepAlive(),
+      },
       title: 'Flutter bottomNavigationBar',
       theme: new ThemeData.dark(),
-      home: NavigationKeepAlive(),
-      //home: new SplashPage(),
+      // home: NavigationKeepAlive(),
+      home: new SplashPage(),
     );
   }
 }
