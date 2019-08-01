@@ -5,6 +5,8 @@ import 'package:myapp/common/config.dart';
 import 'package:flukit/flukit.dart';
 import 'package:myapp/router/index.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class SplashPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -34,15 +36,16 @@ class SplashPageState extends State<SplashPage> {
   }
 
   void _initAsync() async {
-    // await SpUtil.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
-      // if (SpUtil.getBool(Config.appGuid, defValue: true) &&
-      //     ObjectUtil.isNotEmpty(_guideList)) {
-      //   SpUtil.putBool(Config.appGuid, false);
+      print(prefs.getBool(Config.appGuid));
+      if (prefs.getBool(Config.appGuid) ?? true &&
+          ObjectUtil.isNotEmpty(_guideList)) {
+        prefs.setBool(Config.appGuid, false);
         _initBanner();
-      // } else {
-      //   _initSplash();
-      // }
+      } else {
+        _initSplash();
+      }
     });
   }
 
