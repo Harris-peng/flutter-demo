@@ -10,6 +10,10 @@ class RouteUtil {
     pushNamed(context, RouteName.login);
   }
 
+  static void goSearch(BuildContext context) {
+    pushNamed(context, RouteName.search);
+  }
+
   static void pushNamed(BuildContext context, String pageName) {
     Navigator.of(context).pushNamed(pageName);
   }

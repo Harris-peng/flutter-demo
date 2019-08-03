@@ -35,7 +35,7 @@ class _NavigationKeepAliveState extends State<NavigationKeepAlive>
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-//          onTap: (index)=> _controller.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn),
+        // onTap: (index)=> _controller.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn),
         onTap: (index) {
           _controller.jumpToPage(index);
           setState(() {
@@ -55,11 +55,11 @@ class _NavigationKeepAliveState extends State<NavigationKeepAlive>
               )),
           BottomNavigationBarItem(
               icon: Icon(
-                Icons.airplay,
+                Icons.person,
                 color: _bottomNavigationColor,
               ),
               title: Text(
-                'AIRPLAY',
+                'ME',
                 style: TextStyle(color: _bottomNavigationColor),
               )),
         ],

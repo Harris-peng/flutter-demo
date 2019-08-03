@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:myapp/common/utils.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:myapp/common/config.dart';
-import 'package:flukit/flukit.dart';
 import 'package:myapp/router/index.dart';
+
+import 'package:rxdart/rxdart.dart';
+import 'package:flukit/flukit.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -168,7 +170,7 @@ class SplashPageState extends State<SplashPage> {
                 },
                 child: new Container(
                     padding: EdgeInsets.all(12.0),
-                    child: new Text('调转  $_count',
+                    child: new Text('跳转  $_count',
                       style: new TextStyle(fontSize: 14.0, color: Colors.white),
                     ),
                     decoration: new BoxDecoration(

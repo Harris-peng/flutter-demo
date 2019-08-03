@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flustars/flustars.dart'; 
 import 'package:myapp/common/utils.dart';
+import 'package:myapp/pages/list.dart';
+import 'package:myapp/pages/search.dart';
+import 'package:myapp/router/index.dart';
 
-final List<String> _allPages = <String>[
-  '干垃圾',
-  '湿垃圾',
-  '可回收',
-  '有害',
+const TABNAMEKEY = 'tabName';
+const TABIDKEY = 'id';
+final List<Map> _allPages = <Map>[
+  {
+    TABNAMEKEY: '干垃圾',
+    TABIDKEY: 8
+  },
+   {
+    TABNAMEKEY: '湿垃圾',
+    TABIDKEY: 4
+  },
+   {
+    TABNAMEKEY: '可回收垃圾',
+    TABIDKEY: 1
+  },
+   {
+    TABNAMEKEY: '有害垃圾',
+    TABIDKEY: 2
+  },
 ];
-class TabLayout extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new TabBar(
-      isScrollable: true,
-      labelPadding: EdgeInsets.all(12.0),
-      indicatorSize: TabBarIndicatorSize.label,
-      tabs: _allPages
-          .map((String name) =>
-              new Tab(text: name))
-          .toList(),
-    );
-  }
-}
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -44,50 +47,85 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new MyAppBar(
-        leading: new Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: AssetImage(
-                Utils.getImgPath('tx'),
+     return new DefaultTabController(
+      length: _allPages.length,
+      child:  Scaffold(
+        appBar: new MyAppBar(
+          leading: new Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: AssetImage(
+                  Utils.getImgPath('tx'),
+                ),
+                fit: BoxFit.cover,
               ),
-            ),
+            ),  
+            margin: const EdgeInsets.all(5.0),
           ),
-        ),
-        centerTitle: true,
-        title: new TabLayout(),
-        actions: <Widget>[
-          new IconButton(
+          centerTitle: true,
+          title: new TabLayout(),
+          actions: <Widget>[
+            new IconButton(
               icon: new Icon(Icons.search),
               onPressed: () {
-                // NavigatorUtil.pushPage(context, new SearchPage(),
-                //     pageName: "SearchPage");
-                // NavigatorUtil.pushPage(context,  new TestPage());
-                //  NavigatorUtil.pushPage(context,  new DemoApp());
+                RouteUtil.goSearch(context);
               })
-        ],
-      ),
-      body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-            new Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
           ],
         ),
-      ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ),
+        body: new TabBarViewLayout(),
+        // floatingActionButton: new FloatingActionButton(
+        //   onPressed: _incrementCounter,
+        //   tooltip: 'Increment',
+        //   child: new Icon(Icons.add),
+        // ),
+      )
     );
+  }
+}
+
+class TabLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new TabBar(
+      isScrollable: true,
+      labelPadding: EdgeInsets.all(12.0),
+      indicatorSize: TabBarIndicatorSize.label,
+      tabs: _allPages
+          .map((Map item) =>
+              new Tab(text: item[TABNAMEKEY]))
+          .toList(),
+    );
+  }
+}
+class TabBarViewLayout extends StatelessWidget {
+  Widget buildTabView(BuildContext context, num labelId) {
+    return new GarbageList(labelId: labelId);
+    // switch (name) {r
+    //   case '干垃圾':
+    //     return new Text(name);
+    //     break;
+    //   case '湿垃圾':
+    //     return ReposPage(labelId: name);
+    //     break;
+    //   case '可回收':
+    //     return EventsPage(labelId: name);
+    //     break;
+    //   case '有害':
+    //     return SystemPage(labelId: name);
+    //     break;
+    //   default:
+    //     return Container();
+    //     break;
+    // }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    LogUtil.e("TabBarViewLayout build.......");
+    return new TabBarView(
+        children: _allPages.map((Map item) {
+      return buildTabView(context, item[TABIDKEY]);
+    }).toList());
   }
 }

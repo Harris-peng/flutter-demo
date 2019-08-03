@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/common/const.dart';
 import 'package:myapp/pages/index.dart';
+import 'package:myapp/pages/search.dart';
 import 'package:myapp/pages/splash.dart';
 import 'package:flustars/flustars.dart';
 
@@ -36,9 +37,10 @@ class MyAppState extends State<MyApp> {
     return new MaterialApp(
       routes: {
        RouteName.home: (ctx) => NavigationKeepAlive(),
+       RouteName.search: (ctx) => SearchPage(),
       },
       title: 'Flutter bottomNavigationBar',
-      theme: new ThemeData.dark(),
+      theme: new ThemeData.light(),
       // home: NavigationKeepAlive(),
       home: new SplashPage(),
     );
