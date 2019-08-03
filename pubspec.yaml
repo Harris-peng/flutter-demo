@@ -52,7 +52,7 @@ flutter:
     - assets/images/guide4.png
     - assets/images/splash_bg.png
     - assets/images/tx.png
-    - lib/garbage-classification-data/garbage.json
+    - garbage-classification-data/garbage.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

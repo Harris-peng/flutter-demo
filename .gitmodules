@@ -1,3 +1,6 @@
 [submodule "lib/garbage-classification-data"]
 	path = lib/garbage-classification-data
 	url = git@github.com:Harris-peng/garbage-classification-data.git
+[submodule "garbage-classification-data"]
+	path = garbage-classification-data
+	url = git@github.com:Harris-peng/garbage-classification-data.git
