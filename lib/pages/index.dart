@@ -29,7 +29,7 @@ class _NavigationKeepAliveState extends State<NavigationKeepAlive>
         controller: _controller,
         children: <Widget>[
           HomeScreen(),
-          PagesScreen()
+          MeScreen()
         ],
         physics: NeverScrollableScrollPhysics(),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/common/const.dart';
-import 'package:myapp/pages/main.dart';
+import 'package:myapp/pages/index.dart';
 import 'package:myapp/pages/splash.dart';
 import 'package:flustars/flustars.dart';
 
