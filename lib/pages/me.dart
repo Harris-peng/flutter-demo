@@ -8,7 +8,6 @@ class MeScreen extends StatefulWidget {
 class _MeScreenState extends State<MeScreen>
     with AutomaticKeepAliveClientMixin {
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   int _counter = 0;

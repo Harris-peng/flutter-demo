@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flustars/flustars.dart'; 
 import 'package:myapp/common/utils.dart';
 import 'package:myapp/pages/list.dart';
-import 'package:myapp/pages/search.dart';
 import 'package:myapp/router/index.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
 
 const TABNAMEKEY = 'tabName';
 const TABIDKEY = 'id';
@@ -17,12 +18,12 @@ final List<Map> _allPages = <Map>[
     TABIDKEY: 4
   },
    {
-    TABNAMEKEY: '可回收垃圾',
-    TABIDKEY: 1
-  },
-   {
     TABNAMEKEY: '有害垃圾',
     TABIDKEY: 2
+  },
+   {
+    TABNAMEKEY: '可回收垃圾',
+    TABIDKEY: 1
   },
 ];
 
@@ -34,17 +35,41 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin {
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+  final List countyList = new List();
+  final List _dryGarbageList = new List(); // 干垃圾
+  final List _wetGarbageList = new List(); // 湿垃圾
+  final List _harmfulGarbageList = new List(); // 有害垃圾
+  final List _recycleGarbageList = new List(); // 可回收垃圾
 
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
+   void loadData() async {
+    //加载城市列表
+    rootBundle.loadString('garbage-classification-data/garbage.json').then((garbage) {
+      List countyList = json.decode(garbage);
+      countyList.forEach((item) {
+        switch (item['categroy']) {
+          case 1:
+            return _recycleGarbageList.add(item); 
+            break;
+          case 2:
+            return _harmfulGarbageList.add(item); 
+            break;
+          case 4:
+            return _wetGarbageList.add(item); 
+            break;
+          case 8:
+            return _dryGarbageList.add(item); 
+            break;
+        }
+      });
+      setState(() {});
     });
   }
-
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
   @override
   Widget build(BuildContext context) {
      return new DefaultTabController(
@@ -73,12 +98,7 @@ class _HomeScreenState extends State<HomeScreen>
               })
           ],
         ),
-        body: new TabBarViewLayout(),
-        // floatingActionButton: new FloatingActionButton(
-        //   onPressed: _incrementCounter,
-        //   tooltip: 'Increment',
-        //   child: new Icon(Icons.add),
-        // ),
+        body: new TabBarViewLayout(_dryGarbageList, _wetGarbageList, _harmfulGarbageList, _recycleGarbageList),
       )
     );
   }
@@ -99,25 +119,31 @@ class TabLayout extends StatelessWidget {
   }
 }
 class TabBarViewLayout extends StatelessWidget {
+  final List _dryGarbageList;
+  final List _wetGarbageList;
+  final List _harmfulGarbageList;
+  final List _recycleGarbageList;
+
+  TabBarViewLayout(this._dryGarbageList, this._wetGarbageList, this._harmfulGarbageList, this._recycleGarbageList);
+  
   Widget buildTabView(BuildContext context, num labelId) {
-    return new GarbageList(labelId: labelId);
-    // switch (name) {r
-    //   case '干垃圾':
-    //     return new Text(name);
-    //     break;
-    //   case '湿垃圾':
-    //     return ReposPage(labelId: name);
-    //     break;
-    //   case '可回收':
-    //     return EventsPage(labelId: name);
-    //     break;
-    //   case '有害':
-    //     return SystemPage(labelId: name);
-    //     break;
-    //   default:
-    //     return Container();
-    //     break;
-    // }
+    switch (labelId) {
+      case 8:
+        return new GarbageList(dataList: _dryGarbageList);
+        break;
+      case 4:
+        return new GarbageList(dataList: _wetGarbageList);
+        break;
+      case 2:
+        return new GarbageList(dataList: _harmfulGarbageList);
+        break;
+      case 1:
+        return new GarbageList(dataList: _recycleGarbageList);
+        break;
+      default:
+        return Container();
+        break;
+    }
   }
 
   @override

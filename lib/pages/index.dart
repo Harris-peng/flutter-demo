@@ -35,7 +35,6 @@ class _NavigationKeepAliveState extends State<NavigationKeepAlive>
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        // onTap: (index)=> _controller.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn),
         onTap: (index) {
           _controller.jumpToPage(index);
           setState(() {
