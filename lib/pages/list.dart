@@ -1,7 +1,6 @@
 // Step 7 (Final): Change the app's theme
 
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
@@ -38,16 +37,16 @@ class GarbageListState extends State<GarbageList> {
       countyList.forEach((item) {
         switch (item['categroy']) {
           case 1:
-            return _recycleGarbageList.add(item); 
+            return _recycleGarbageList.add(item);
             break;
           case 2:
-            return _harmfulGarbageList.add(item); 
+            return _harmfulGarbageList.add(item);
             break;
           case 4:
-            return _wetGarbageList.add(item); 
+            return _wetGarbageList.add(item);
             break;
           case 8:
-            return _dryGarbageList.add(item); 
+            return _dryGarbageList.add(item);
             break;
         }
       });
@@ -91,7 +90,7 @@ class GarbageListState extends State<GarbageList> {
           print(_garbageList);
           print(e);
         }
-       
+
       },
     );
   }
@@ -134,5 +133,5 @@ class GarbageListState extends State<GarbageList> {
 //     }
 //     return _instance;
 //   }
- 
+
 // }

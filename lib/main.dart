@@ -21,7 +21,7 @@ class MyAppState extends State<MyApp> {
   //   super.initState();
   //   _initAsync();
   // }
- 
+
   // void _initAsync() async {
   //   await SpUtil.getInstance();
   // }
@@ -33,11 +33,11 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return new MaterialApp(
       routes: {
        RouteName.home: (ctx) => NavigationKeepAlive(),
-       RouteName.search: (ctx) => SearchPage(),
+       // RouteName.search: (ctx) => SearchPage(),
       },
       title: 'Flutter bottomNavigationBar',
       theme: new ThemeData.light(),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flustars/flustars.dart'; 
+import 'package:flustars/flustars.dart';
 import 'package:myapp/common/utils.dart';
 import 'package:myapp/pages/list.dart';
 import 'package:myapp/pages/search.dart';
 import 'package:myapp/router/index.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
 
 const TABNAMEKEY = 'tabName';
 const TABIDKEY = 'id';
@@ -60,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 fit: BoxFit.cover,
               ),
-            ),  
+            ),
             margin: const EdgeInsets.all(5.0),
           ),
           centerTitle: true,
@@ -69,7 +71,9 @@ class _HomeScreenState extends State<HomeScreen>
             new IconButton(
               icon: new Icon(Icons.search),
               onPressed: () {
-                RouteUtil.goSearch(context);
+                // RouteUtil.goSearch(context);
+                // final List data = loadData();
+                showSearch(context: context,delegate: SearchBarDelegate());
               })
           ],
         ),
@@ -101,7 +105,7 @@ class TabLayout extends StatelessWidget {
 class TabBarViewLayout extends StatelessWidget {
   Widget buildTabView(BuildContext context, num labelId) {
     return new GarbageList(labelId: labelId);
-    // switch (name) {r
+    // switch (name) {
     //   case '干垃圾':
     //     return new Text(name);
     //     break;
@@ -129,3 +133,11 @@ class TabBarViewLayout extends StatelessWidget {
     }).toList());
   }
 }
+// loadData() async {
+//   final List searchList = [];
+//   //加载城市列表
+//   await rootBundle.loadString('garbage-classification-data/garbage.json').then((garbage) {
+//     List searchList = json.decode(garbage);
+//   });
+//   return searchList;
+// }

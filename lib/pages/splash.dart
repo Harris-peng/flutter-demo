@@ -39,7 +39,7 @@ class SplashPageState extends State<SplashPage> {
 
   void _initAsync() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
+    Observable.just(1).delay(new Duration(milliseconds: 1000)).listen((_) {
       print(prefs.getBool(Config.appGuid));
       if (prefs.getBool(Config.appGuid) ?? true &&
           ObjectUtil.isNotEmpty(_guideList)) {
@@ -126,6 +126,25 @@ class SplashPageState extends State<SplashPage> {
   void _goMain() {
     RouteUtil.goHome(context);
   }
+  Widget _buildAdWidget() {
+    return new Offstage(
+      offstage: !(_status == 1),
+      child: new InkWell(
+        onTap: () {
+          _goMain();
+        },
+        child: new Container(
+          alignment: Alignment.center,
+          child: new Image.asset(
+          Utils.getImgPath('guide5'),
+          width: double.infinity,
+          fit: BoxFit.fill,
+          height: double.infinity,
+        ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildSplashBg() {
     return new Image.asset(
@@ -146,7 +165,7 @@ class SplashPageState extends State<SplashPage> {
             child: _buildSplashBg(),
           ),
           new Offstage(
-            offstage: !(_status == 2), 
+            offstage: !(_status == 2),
             child: ObjectUtil.isEmpty(_bannerList)
                 ? new Container()
                 : new Swiper(
@@ -159,6 +178,7 @@ class SplashPageState extends State<SplashPage> {
                     ),
                     children: _bannerList),
           ),
+          _buildAdWidget(),
           new Offstage(
             offstage: !(_status == 1),
             child: new Container(
