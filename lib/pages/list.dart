@@ -33,7 +33,7 @@ class GarbageListState extends State<GarbageList> {
           print(dataList);
           print(e);
         }
-       
+
       },
     );
   }

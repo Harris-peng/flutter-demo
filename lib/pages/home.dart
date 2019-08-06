@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flustars/flustars.dart'; 
+import 'package:flutter/services.dart';
+
+import 'package:flustars/flustars.dart';
+
 import 'package:myapp/common/utils.dart';
 import 'package:myapp/pages/list.dart';
-import 'package:myapp/router/index.dart';
-import 'package:flutter/services.dart';
+import 'package:myapp/pages/search.dart';
+
 import 'dart:convert';
 
 const TABNAMEKEY = 'tabName';
@@ -42,23 +45,23 @@ class _HomeScreenState extends State<HomeScreen>
   final List _harmfulGarbageList = new List(); // 有害垃圾
   final List _recycleGarbageList = new List(); // 可回收垃圾
 
-   void loadData() async {
+   Future<Null> loadData() async {
     //加载城市列表
     rootBundle.loadString('garbage-classification-data/garbage.json').then((garbage) {
       List countyList = json.decode(garbage);
       countyList.forEach((item) {
         switch (item['categroy']) {
           case 1:
-            return _recycleGarbageList.add(item); 
+            _recycleGarbageList.add(item); 
             break;
           case 2:
-            return _harmfulGarbageList.add(item); 
+            _harmfulGarbageList.add(item); 
             break;
           case 4:
-            return _wetGarbageList.add(item); 
+            _wetGarbageList.add(item); 
             break;
           case 8:
-            return _dryGarbageList.add(item); 
+            _dryGarbageList.add(item); 
             break;
         }
       });
@@ -85,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 fit: BoxFit.cover,
               ),
-            ),  
+            ),
             margin: const EdgeInsets.all(5.0),
           ),
           centerTitle: true,
@@ -94,7 +97,10 @@ class _HomeScreenState extends State<HomeScreen>
             new IconButton(
               icon: new Icon(Icons.search),
               onPressed: () {
-                RouteUtil.goSearch(context);
+                print(countyList.toString());
+                // RouteUtil.goSearch(context);
+                // final List data = loadData();
+                showSearch(context: context,delegate: SearchBarDelegate(countyList));
               })
           ],
         ),
