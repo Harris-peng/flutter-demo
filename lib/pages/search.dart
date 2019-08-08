@@ -1,44 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-final List<Map>  searchList = [
-  {"name":"阿司匹林","categroy":2},
-  {"name":"阿尔卑斯糖","categroy":4},
-  {"name":"艾草","categroy":4},
-  {"name":"艾叶","categroy":4},
-  {"name":"安全帽","categroy":1},
-  {"name":"密胺碗","categroy":1},
-  {"name":"密胺餐具","categroy":1},
-  {"name":"档案袋","categroy":1},
-  {"name":"肮脏塑料袋","categroy":8},
-  {"name":"棉袄","categroy":1},
-  {"name":"芭蕉叶","categroy":4},
-  {"name":"八角","categroy":4},
-  {"name":"八宝饭","categroy":4},
-  {'name': "liyu",'categroy': 2},
-  {'name': "liuyue", 'categroy': 2},
-];
-final Map<int, String> rabbishs = {
+import 'dart:convert';
+
+final Map<int, String> rabbishs = { 
   8: '干垃圾',
   4: '湿垃圾',
   1: '可回收垃圾',
   2: '有害垃圾',
 };
-const List<Map> recentSuggest = [
-
-  {
-    'name': "dangpenghao",
-    'categroy': 1,
-  },
-  {
-    'name': "shijunyang",
-    'categroy': 4,
-  },
-
-];
 
 class SearchBarDelegate extends SearchDelegate<String>{
-  final List dataList;
-  SearchBarDelegate (this.dataList);
+  Future<List> loadData() async {
+      final dataList = await rootBundle.loadString('garbage-classification-data/garbage.json');
+      return json.decode(dataList);
+  }
   //清空按钮
   @override
   List<Widget>buildActions(BuildContext context){
@@ -62,48 +38,61 @@ class SearchBarDelegate extends SearchDelegate<String>{
   //搜到到内容后的展现
   @override
   Widget buildResults(BuildContext context){
-    return Container(
-      width: 100.0,
-      height:100.0,
-      child: Card(
-        color:Colors.redAccent,
-        child: Center(
-          child: Text(query),
-        ),
-      ),
-    );
+    return buildFutureBuilder();
   }
   //设置推荐
   @override
   Widget buildSuggestions (BuildContext context) {
-    print(this.dataList.toString());
-    final suggestionsList= query.isEmpty
-      ? recentSuggest
-      : dataList.where((input) {
-        final String name = input['name'];
-        return name.startsWith(query);
-      }).toList();
-
-    return ListView.builder(
-      itemCount:suggestionsList.length,
-      itemBuilder: (context,index) => ListTile(
-        title: RichText( //富文本
-          text: TextSpan(
-            text: suggestionsList[index]['name'].substring(0,query.length),
-            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-            children: [
-              TextSpan(
-                text: suggestionsList[index]['name'].substring(query.length),
-                style: TextStyle(color: Colors.grey)
+    return buildFutureBuilder();
+  }
+  FutureBuilder<List> buildFutureBuilder() {
+    return new FutureBuilder<List>(
+      builder: (context, AsyncSnapshot<List> result) {
+        if (result.connectionState == ConnectionState.active ||
+            result.connectionState == ConnectionState.waiting) {
+          return new Center(
+            child: new CircularProgressIndicator(),
+          );
+        }
+        if (result.connectionState == ConnectionState.done) {
+          if (result.hasError) {
+            return new Center(
+              child: new Text("ERROR"),
+            );
+          } else if (result.hasData) {
+            List suggestionsList = result.data;
+            if (query != '') {
+              suggestionsList = suggestionsList.where((item) =>  item['name'].startsWith(query)).toList();
+            } else {
+              suggestionsList = [];
+            }
+            print(suggestionsList.length);
+            return suggestionsList.length != 0 ? ListView.builder(
+              itemCount:suggestionsList.length,
+              itemBuilder: (context,index) => ListTile(
+                title: RichText( //富文本
+                  text: TextSpan(
+                    text: suggestionsList[index]['name'].substring(0,query.length),
+                    style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                    children: [
+                      TextSpan(
+                        text: suggestionsList[index]['name'].substring(query.length),
+                        style: TextStyle(color: Colors.grey)
+                      )
+                    ]
+                  ),
+                ),
+                trailing: query != '' ? Text(rabbishs[suggestionsList[index]['categroy']],
+                  style: TextStyle(color: Colors.grey)
+                ) : '',
               ),
-              TextSpan(
-                text: '<------->' + rabbishs[suggestionsList[index]['categroy']],
-                style: TextStyle(color: Colors.grey)
-              )
-            ]
-          ),
-        ),
-      ),
+            ) : new Center(
+              child: new Text("暂无内容"),
+            );
+          }
+        }
+      },
+      future: loadData(),
     );
   }
 }

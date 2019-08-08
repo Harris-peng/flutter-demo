@@ -99,8 +99,7 @@ class _HomeScreenState extends State<HomeScreen>
               onPressed: () {
                 print(countyList.toString());
                 // RouteUtil.goSearch(context);
-                // final List data = loadData();
-                showSearch(context: context,delegate: SearchBarDelegate(countyList));
+                showSearch(context: context,delegate: SearchBarDelegate());
               })
           ],
         ),
